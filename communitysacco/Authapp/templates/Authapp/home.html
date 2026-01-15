@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1>Welcome to Community Sacco</h1>
+    <p class="lead">Empowering you to save, borrow, and grow together.</p>
+
+    <div class="row mt-4">
+        <!-- Savings -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Savings</h5>
+                    <p class="card-text">Secure your future by building consistent savings with us.</p>
+                    <a href="{% url 'savings' %}" class="btn btn-success">Explore Savings</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Transactions</h5>
+                    <p class="card-text">Track all your deposits, withdrawals, and loan repayments in one place.</p>
+                    <a href="{% url 'transactions' %}" class="btn btn-info">View Transactions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0"> Your journey to financial freedom starts here.</p>
+</footer>
+{% endblock %}
