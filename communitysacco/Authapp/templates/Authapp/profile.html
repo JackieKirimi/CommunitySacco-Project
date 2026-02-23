@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>Profile</h2>
+  <p>Welcome, {{ user.username }}. This is your SACCO profile page.</p>
+  <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+</div>
+{% endblock %}

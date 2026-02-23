@@ -1,38 +1,27 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container mt-5 text-center">
-    <h1>Welcome to Community Sacco</h1>
-    <p class="lead">Empowering you to save, borrow, and grow together.</p>
+<div class="home-hero d-flex align-items-center justify-content-center text-center">
+  <div class="overlay">
+    <h1 class="text-white fw-bold">Welcome to Community Sacco</h1>
+    <p class="lead text-white">Empowering you to save, borrow, and grow together.</p>
 
-    <div class="row mt-4">
-        <!-- Savings -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Savings</h5>
-                    <p class="card-text">Secure your future by building consistent savings with us.</p>
-                    <a href="{% url 'savings' %}" class="btn btn-success">Explore Savings</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Transactions -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Transactions</h5>
-                    <p class="card-text">Track all your deposits, withdrawals, and loan repayments in one place.</p>
-                    <a href="{% url 'transactions' %}" class="btn btn-info">View Transactions</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% if user.is_authenticated %}
+      <p class="text-white">Hello, <strong>{{ user.username }}</strong>! Glad to have you back.</p>
+    {% else %}
+      <p class="text-white">Please 
+        <a href="{% url 'login' %}" class="text-warning fw-bold">login</a> 
+        or 
+        <a href="{% url 'register' %}" class="text-warning fw-bold">register</a>.
+      </p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
 
 {% block footer %}
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <p class="mb-0"> Your journey to financial freedom starts here.</p>
+<footer class="bg-dark text-warning text-center py-3 mt-5">
+  <p class="mb-0">Your journey to financial freedom starts here.</p>
 </footer>
 {% endblock %}

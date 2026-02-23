@@ -1,0 +1,16 @@
+.home-hero {
+    background: url("../images/sacco.jpg") no-repeat center center;
+    background-size: cover;
+    height: 80vh;
+    /* adjust height as needed */
+    position: relative;
+}
+
+.home-hero .overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    /* dark overlay for readability */
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+}
