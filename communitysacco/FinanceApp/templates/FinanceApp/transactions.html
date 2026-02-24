@@ -1,0 +1,40 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="content-panel p-4 mb-4">
+    <h2 class="section-title mb-1">Transactions</h2>
+    <p class="mb-0">Review your deposits, disbursements, and repayments.</p>
+  </div>
+  <div class="content-panel p-4">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for txn in transactions %}
+              <tr>
+                <td>{{ txn.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ txn.get_transaction_type_display }}</td>
+                <td>{{ txn.get_status_display }}</td>
+                <td>{{ txn.amount }}</td>
+                <td>{{ txn.description|default:"-" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5">No transactions found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

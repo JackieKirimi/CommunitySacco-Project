@@ -1,0 +1,108 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="content-panel p-4 mb-4">
+    <h2 class="section-title mb-1">Loan Approval Dashboard</h2>
+    <p class="mb-0">Review requests and assign loan limits for applicants.</p>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="content-panel p-4 mb-4">
+      <h5 class="section-title mb-3">Pending Requests</h5>
+      {% for loan in pending_loans %}
+        <div class="border rounded p-3 mb-3">
+          <p class="mb-1"><strong>Applicant:</strong> {{ loan.name }} ({{ loan.user.username }})</p>
+          <p class="mb-1"><strong>ID Number:</strong> {{ loan.id_number }}</p>
+          <p class="mb-1"><strong>Amount:</strong> {{ loan.amount }}</p>
+          <p class="mb-1"><strong>Purpose:</strong> {{ loan.purpose|default:"-" }}</p>
+          <p class="mb-2"><strong>Document:</strong> <a href="{{ loan.document.url }}" target="_blank">View Uploaded File</a></p>
+
+          <form method="POST" class="row g-2">
+            {% csrf_token %}
+            <input type="hidden" name="loan_id" value="{{ loan.id }}">
+            <div class="col-md-8">
+              <input type="text" name="admin_comment" class="form-control" placeholder="Admin comment (optional)">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" name="action" value="APPROVED" class="btn btn-success w-100">Approve</button>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" name="action" value="REJECTED" class="btn btn-danger w-100">Reject</button>
+            </div>
+          </form>
+        </div>
+      {% empty %}
+        <p class="mb-0">No pending loan requests.</p>
+      {% endfor %}
+  </div>
+
+  <div class="content-panel p-4 mb-4">
+      <h5 class="section-title mb-3">Set User Loan Limit</h5>
+      <form method="POST" class="row g-2 align-items-end">
+        {% csrf_token %}
+        <div class="col-md-5">
+          <label class="form-label">Applicant</label>
+          <select name="target_user_id" class="form-select" required>
+            <option value="">Select user</option>
+            {% for applicant in applicants_with_limits %}
+              <option value="{{ applicant.id }}">
+                {{ applicant.username }} (current limit: {{ applicant.limit|default:"None" }})
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Loan Limit Amount (blank = None)</label>
+          <input type="number" step="0.01" min="0" name="loan_limit_amount" class="form-control" placeholder="e.g. 50000.00">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" name="action" value="SET_LIMIT" class="btn btn-warning w-100">Save</button>
+        </div>
+      </form>
+  </div>
+
+  <div class="content-panel p-4">
+      <h5 class="section-title mb-3">All Loan Requests</h5>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User</th>
+              <th>Name</th>
+              <th>ID Number</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Reviewed By</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for loan in all_loans %}
+              <tr>
+                <td>{{ loan.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ loan.user.username }}</td>
+                <td>{{ loan.name }}</td>
+                <td>{{ loan.id_number }}</td>
+                <td>{{ loan.amount }}</td>
+                <td>{{ loan.status }}</td>
+                <td>{{ loan.reviewed_by.username|default:"-" }}</td>
+                <td>{{ loan.admin_comment|default:"-" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8">No loan data available.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

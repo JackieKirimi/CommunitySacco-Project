@@ -12,17 +12,79 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'Authapp/css/style.css' %}">
+    <style>
+        body {
+            min-height: 100vh;
+            color: #f8fafc;
+            background: linear-gradient(rgba(8, 25, 33, 0.78), rgba(8, 25, 33, 0.78)),
+                        url("{% static 'Authapp/images/sacco.jpg' %}") center/cover no-repeat fixed;
+        }
+
+        .page-shell {
+            min-height: 100vh;
+        }
+
+        .content-panel {
+            background: rgba(255, 255, 255, 0.11);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+            color: #f8fafc;
+        }
+
+        .content-panel .table {
+            color: #f8fafc;
+        }
+
+        .content-panel .table td,
+        .content-panel .table th {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .section-title {
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .kpi-label {
+            opacity: 0.88;
+            margin-bottom: 0;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 0;
+        }
+
+        .alert {
+            border: 0;
+        }
+    </style>
 </head>
 
 <body>
-    {% include 'navbar.html' %}
-    {% block content %}
-    <div class="container mt-4">
-        <h1>Welcome to Community Sacco</h1>
-        <p>Your trusted partner in financial services.</p>
-    </div>
+    <div class="page-shell">
+        <div style="position: fixed; right: 10px; bottom: 10px; z-index: 9999; background: rgba(0,0,0,0.55); color: #fff; padding: 4px 8px; border-radius: 8px; font-size: 12px;">
+            UI Build: 2026-02-24-v3
+        </div>
+        {% include 'navbar.html' %}
+        {% block content %}
+        <div class="container mt-4">
+            <h1>Welcome to Community Sacco</h1>
+            <p>Your trusted partner in financial services.</p>
+        </div>
 
-    {% endblock %}
+        {% endblock %}
+    </div>
 
 </body>
 

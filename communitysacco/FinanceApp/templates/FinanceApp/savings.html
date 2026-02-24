@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="content-panel p-4 mb-4">
+    <h2 class="section-title mb-1">Savings Track Record</h2>
+    <p class="mb-0">Track and grow your savings consistently.</p>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="content-panel p-4 mb-4">
+      <h5 class="section-title">Add Savings Deposit</h5>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Amount</label>
+            {{ form.amount }}
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Notes</label>
+            {{ form.notes }}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Save Record</button>
+      </form>
+  </div>
+
+  <div class="content-panel p-4">
+      <h5 class="section-title">History</h5>
+      <p><strong>Total Saved:</strong> {{ total_saved }}</p>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records %}
+              <tr>
+                <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ record.amount }}</td>
+                <td>{{ record.notes|default:"-" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3">No savings records yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

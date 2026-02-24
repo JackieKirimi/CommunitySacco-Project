@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00695c;">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: rgba(0, 77, 64, 0.92); border-bottom: 1px solid rgba(255,255,255,0.2);">
+  <div class="container">
     <!-- Brand -->
-    <a class="navbar-brand" href="#">Community Sacco</a>
+    <a class="navbar-brand fw-bold" href="{% url 'home' %}">Community Sacco</a>
 
     <!-- Mobile toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -13,9 +13,9 @@
     <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <!-- Home -->
+        <!-- Dashboard -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Home</a>
+          <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
         </li>
 
         <!-- Savings-->
@@ -43,11 +43,17 @@
             {% if user.is_authenticated %}
               <!-- Logged-in options -->
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+              {% if user.is_staff %}
+                <li><a class="dropdown-item" href="{% url 'loan-approval-dashboard' %}">Loan Approvals</a></li>
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'admin-login' %}">Admin Login</a></li>
+              {% endif %}
               <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
             {% else %}
               <!-- Logged-out options -->
               <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
               <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+              <li><a class="dropdown-item" href="{% url 'admin-login' %}">Admin Login</a></li>
             {% endif %}
           </ul>
         </li>
