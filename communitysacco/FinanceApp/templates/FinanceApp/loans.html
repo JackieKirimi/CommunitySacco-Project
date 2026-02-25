@@ -1,0 +1,80 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="content-panel p-4 mb-4">
+    <h2 class="section-title mb-1">Loan Application</h2>
+    <p class="mb-0">Submit your request and track approval updates.</p>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="content-panel p-4 mb-4">
+      <h5 class="section-title">Apply for a Loan</h5>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Name</label>
+            {{ form.name }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">ID Number</label>
+            {{ form.id_number }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Loan Amount</label>
+            {{ form.amount }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Supporting Document</label>
+            {{ form.document }}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Purpose</label>
+            {{ form.purpose }}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit Loan Request</button>
+      </form>
+  </div>
+
+  <div class="content-panel p-4">
+      <h5 class="section-title">My Loan Requests</h5>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>ID Number</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Admin Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for loan in loan_requests %}
+              <tr>
+                <td>{{ loan.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ loan.name }}</td>
+                <td>{{ loan.id_number }}</td>
+                <td>{{ loan.amount }}</td>
+                <td>{{ loan.status }}</td>
+                <td>{{ loan.admin_comment|default:"-" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6">No loan requests submitted yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+{% endblock %}

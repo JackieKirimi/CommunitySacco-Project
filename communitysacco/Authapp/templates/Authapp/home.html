@@ -2,26 +2,68 @@
 {% load static %}
 
 {% block content %}
-<div class="home-hero d-flex align-items-center justify-content-center text-center">
-  <div class="overlay">
-    <h1 class="text-white fw-bold">Welcome to Community Sacco</h1>
-    <p class="lead text-white">Empowering you to save, borrow, and grow together.</p>
-
-    {% if user.is_authenticated %}
-      <p class="text-white">Hello, <strong>{{ user.username }}</strong>! Glad to have you back.</p>
-    {% else %}
-      <p class="text-white">Please 
-        <a href="{% url 'login' %}" class="text-warning fw-bold">login</a> 
-        or 
-        <a href="{% url 'register' %}" class="text-warning fw-bold">register</a>.
-      </p>
-    {% endif %}
+<div class="container py-4">
+  {% if user.is_authenticated %}
+  <div class="content-panel p-4 mb-4">
+    <h2 class="section-title mb-1">Member Dashboard</h2>
+    <p class="mb-0">Welcome, <strong>{{ user.username }}</strong>. Track your sacco progress from one place.</p>
   </div>
-</div>
-{% endblock %}
 
-{% block footer %}
-<footer class="bg-dark text-warning text-center py-3 mt-5">
-  <p class="mb-0">Your journey to financial freedom starts here.</p>
-</footer>
+  <div class="row g-3">
+    <div class="col-lg-4">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">Loan Status</h5>
+        <p class="kpi-value">{{ loan_status }}</p>
+        <p class="kpi-label">Latest loan application status.</p>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">Savings Amount</h5>
+        <p class="kpi-value">{{ total_saved }}</p>
+        <p class="kpi-label">Total savings deposited so far.</p>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">Pending Transactions</h5>
+        <p class="kpi-value">{{ pending_transactions }}</p>
+        <p class="kpi-label">Transactions awaiting processing.</p>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">My Details</h5>
+        <p class="mb-1"><strong>Username:</strong> {{ user.username }}</p>
+        <p class="mb-1"><strong>Email:</strong> {{ user.email|default:"Not provided" }}</p>
+        <p class="mb-0"><strong>Role:</strong> {% if user.is_staff %}Admin{% else %}User{% endif %}</p>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">Loan Requirements</h5>
+        <p class="mb-2">Before applying for a loan, prepare:</p>
+        <ul class="mb-0">
+          <li>Financial statements for the last 6 months</li>
+          <li>Picture or copy of your national ID</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="content-panel p-3 h-100">
+        <h5 class="section-title">Loan Limit</h5>
+        <p class="kpi-value">{{ loan_limit }}</p>
+        <p class="kpi-label">Default is None until an admin sets it.</p>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="content-panel p-4 text-center">
+    <h2 class="section-title">Welcome to Community Sacco</h2>
+    <p class="mb-3">Login or register to access your member dashboard.</p>
+    <a href="{% url 'login' %}" class="btn btn-warning me-2">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-light">Register</a>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}

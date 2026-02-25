@@ -1,9 +1,12 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div class="container mt-5 text-center">
-  <h2>Profile</h2>
-  <p>Welcome, {{ user.username }}. This is your SACCO profile page.</p>
-  <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+<div class="container py-5">
+  <div class="content-panel p-4 text-center">
+    <h2 class="section-title">Profile</h2>
+    <p class="mb-1"><strong>Username:</strong> {{ user.username }}</p>
+    <p class="mb-3"><strong>Email:</strong> {{ user.email|default:"Not provided" }}</p>
+    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+  </div>
 </div>
 {% endblock %}
