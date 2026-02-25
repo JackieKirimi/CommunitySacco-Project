@@ -1,0 +1,162 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="content-panel p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h2 class="section-title mb-1">Admin Analytics</h2>
+        <p class="mb-0">Usage trends, loan activity, repayments, and payment transactions.</p>
+      </div>
+      <a href="{% url 'loan-approval-dashboard' %}" class="btn btn-outline-light">Loan Approvals</a>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="content-panel p-3 h-100">
+        <p class="kpi-label">Applicants</p>
+        <p class="kpi-value">{{ total_applicants }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="content-panel p-3 h-100">
+        <p class="kpi-label">Loan Requests</p>
+        <p class="kpi-value">{{ total_loan_requests }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="content-panel p-3 h-100">
+        <p class="kpi-label">Approved Loans</p>
+        <p class="kpi-value">{{ approved_loans }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="content-panel p-3 h-100">
+        <p class="kpi-label">Pending Payments</p>
+        <p class="kpi-value">{{ pending_payments }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="content-panel p-3">
+        <h5 class="section-title">Loan Request Status</h5>
+        <canvas id="loanStatusChart" height="180"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="content-panel p-3">
+        <h5 class="section-title">Loan Repayment Status</h5>
+        <canvas id="repaymentStatusChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-panel p-3 mb-4">
+    <h5 class="section-title">Monthly App Usage (Transactions)</h5>
+    <canvas id="monthlyTransactionsChart" height="90"></canvas>
+  </div>
+
+  <div class="content-panel p-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+      <h5 class="section-title mb-0">Recent Payment Transactions</h5>
+      <div>Total Completed Repayments: <strong>{{ total_loan_repayment }}</strong></div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Phone</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for txn in recent_payment_transactions %}
+            <tr>
+              <td>{{ txn.created_at|date:"Y-m-d H:i" }}</td>
+              <td>{{ txn.user.username }}</td>
+              <td>{{ txn.get_transaction_type_display }}</td>
+              <td>{% if txn.status == "PENDING" %}Pending payment{% else %}Completed{% endif %}</td>
+              <td>{{ txn.amount }}</td>
+              <td>{{ txn.phone_number|default:"-" }}</td>
+              <td>{{ txn.payment_reference|default:"-" }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7">No payment transactions found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const loanStatusLabels = {{ loan_status_labels|safe }};
+  const loanStatusData = {{ loan_status_data|safe }};
+  const repaymentStatusLabels = {{ repayment_status_labels|safe }};
+  const repaymentStatusData = {{ repayment_status_data|safe }};
+  const monthlyLabels = {{ monthly_labels|safe }};
+  const monthlyData = {{ monthly_data|safe }};
+
+  const chartOptions = {
+    plugins: {
+      legend: { labels: { color: "#f8fafc" } }
+    },
+    scales: {
+      x: { ticks: { color: "#f8fafc" }, grid: { color: "rgba(255,255,255,0.1)" } },
+      y: { ticks: { color: "#f8fafc" }, grid: { color: "rgba(255,255,255,0.1)" }, beginAtZero: true }
+    }
+  };
+
+  new Chart(document.getElementById("loanStatusChart"), {
+    type: "bar",
+    data: {
+      labels: loanStatusLabels,
+      datasets: [{
+        label: "Requests",
+        data: loanStatusData,
+        backgroundColor: ["#34d399", "#fbbf24", "#f87171"]
+      }]
+    },
+    options: chartOptions
+  });
+
+  new Chart(document.getElementById("repaymentStatusChart"), {
+    type: "doughnut",
+    data: {
+      labels: repaymentStatusLabels,
+      datasets: [{
+        data: repaymentStatusData,
+        backgroundColor: ["#60a5fa", "#f59e0b"]
+      }]
+    },
+    options: { plugins: { legend: { labels: { color: "#f8fafc" } } } }
+  });
+
+  new Chart(document.getElementById("monthlyTransactionsChart"), {
+    type: "line",
+    data: {
+      labels: monthlyLabels,
+      datasets: [{
+        label: "Transactions",
+        data: monthlyData,
+        borderColor: "#22d3ee",
+        backgroundColor: "rgba(34, 211, 238, 0.2)",
+        fill: true,
+        tension: 0.25
+      }]
+    },
+    options: chartOptions
+  });
+</script>
+{% endblock %}

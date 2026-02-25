@@ -1,30 +1,47 @@
-{% extends 'main.html'%}
+{% extends "main.html" %}
 
 {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
 
-<form action="" method="POST">
-
-    {% csrf_token %}
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
-                <div class="content-panel p-4">
-                    <h2 class="section-title text-center mb-3">STK Push Payment</h2>
-                    <form>
-                        <div class="mb-3">
-                            <label for="phonenumber" class="form-label">Enter Phone Number</label>
-                            <input type="phonenumber" class="form-control" id="phonenumber" name="phonenumber"
-                                aria-describedby="phonenumberHelp">
-                            <div id="phonenumberHelp" class="form-text">place a valid phone number eg .....</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="amount" class="form-label">Amount</label>
-                            <input type="number" class="form-control" id="amount" name="amount">
-                        </div>
-                        <button type="submit" class="btn btn-success">Prompt Payment</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+      <div class="content-panel p-4">
+        <h2 class="section-title text-center mb-3">STK Push Payment</h2>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="payment_type" class="form-label">Payment Type</label>
+            <select class="form-select" id="payment_type" name="payment_type">
+              <option value="DEPOSIT" {% if initial_payment_type == "DEPOSIT" %}selected{% endif %}>Savings deposit</option>
+              <option value="LOAN_REPAYMENT" {% if initial_payment_type == "LOAN_REPAYMENT" %}selected{% endif %}>Loan repayment</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="phonenumber" class="form-label">Phone Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phonenumber"
+              name="phonenumber"
+              placeholder="+2547XXXXXXXX or 07XXXXXXXX"
+              value="{{ initial_phone_number|default:'' }}"
+              required
+            >
+            <div id="phonenumberHelp" class="form-text">Use an M-Pesa registered number.</div>
+          </div>
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" min="1" step="1" class="form-control" id="amount" name="amount" value="{{ initial_amount|default:'' }}" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Prompt Payment</button>
+        </form>
+      </div>
     </div>
-    {% endblock %}
+  </div>
+</div>
+{% endblock %}

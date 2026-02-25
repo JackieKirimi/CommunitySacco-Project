@@ -42,6 +42,7 @@
               <th>Date</th>
               <th>Amount</th>
               <th>Notes</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -50,10 +51,15 @@
                 <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
                 <td>{{ record.amount }}</td>
                 <td>{{ record.notes|default:"-" }}</td>
+                <td>
+                  <a href="{% url 'mpesaPayment' %}?payment_type=DEPOSIT&amount={{ record.amount }}" class="btn btn-sm btn-success">
+                    Pay
+                  </a>
+                </td>
               </tr>
             {% empty %}
               <tr>
-                <td colspan="3">No savings records yet.</td>
+                <td colspan="4">No savings records yet.</td>
               </tr>
             {% endfor %}
           </tbody>

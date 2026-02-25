@@ -62,7 +62,7 @@ class Transaction(models.Model):
     STATUS_PENDING = "PENDING"
     STATUS_COMPLETED = "COMPLETED"
     STATUS_CHOICES = [
-        (STATUS_PENDING, "Pending"),
+        (STATUS_PENDING, "Pending payment"),
         (STATUS_COMPLETED, "Completed"),
     ]
 
@@ -70,6 +70,8 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=STATUS_COMPLETED)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
+    phone_number = models.CharField(max_length=20, blank=True)
+    payment_reference = models.CharField(max_length=120, blank=True)
     description = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

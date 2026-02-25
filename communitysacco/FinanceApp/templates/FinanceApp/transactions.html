@@ -23,9 +23,20 @@
               <tr>
                 <td>{{ txn.created_at|date:"Y-m-d H:i" }}</td>
                 <td>{{ txn.get_transaction_type_display }}</td>
-                <td>{{ txn.get_status_display }}</td>
+                <td>
+                  {% if txn.status == "PENDING" %}
+                    Pending payment
+                  {% else %}
+                    {{ txn.get_status_display }}
+                  {% endif %}
+                </td>
                 <td>{{ txn.amount }}</td>
-                <td>{{ txn.description|default:"-" }}</td>
+                <td>
+                  {{ txn.description|default:"-" }}
+                  {% if txn.payment_reference %}
+                    <br><small>Ref: {{ txn.payment_reference }}</small>
+                  {% endif %}
+                </td>
               </tr>
             {% empty %}
               <tr>

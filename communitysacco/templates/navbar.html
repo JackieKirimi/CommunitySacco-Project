@@ -33,6 +33,15 @@
           <a class="nav-link" href="{% url 'transactions' %}">Transactions</a>
         </li>
 
+        <!-- Payment -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'mpesaPayment' %}">Payment</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'app-values' %}">App Values</a>
+        </li>
+
         <!-- Account Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" 
@@ -45,6 +54,7 @@
               <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
               {% if user.is_staff %}
                 <li><a class="dropdown-item" href="{% url 'loan-approval-dashboard' %}">Loan Approvals</a></li>
+                <li><a class="dropdown-item" href="{% url 'admin-analytics-dashboard' %}">Analytics</a></li>
               {% else %}
                 <li><a class="dropdown-item" href="{% url 'admin-login' %}">Admin Login</a></li>
               {% endif %}
