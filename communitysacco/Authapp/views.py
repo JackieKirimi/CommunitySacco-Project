@@ -6,7 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
 from FinanceApp.models import Transaction, UserLoanLimit
 
 
@@ -96,3 +97,34 @@ def registerUser(request):
 @login_required
 def profile(request):
     return render(request, "Authapp/profile.html")
+
+
+def app_values(request):
+    return render(request, "Authapp/app_values.html")
+
+
+@require_POST
+def chatbot_assistant(request):
+    question = request.POST.get("question", "").strip().lower()
+    if not question:
+        return JsonResponse({"answer": "Please ask a question, for example: how do I apply for a loan?"})
+
+    rules = [
+        (["save", "savings", "deposit"], "Go to Savings, add amount and notes, then save. To pay later, use the Pay button in savings history."),
+        (["loan", "apply"], "Go to Loans, fill the form, upload a document, and submit. Admin will review and approve or reject."),
+        (["approved", "repay", "repayment"], "When a loan is approved, use the Pay button on that loan row to open STK payment for repayment."),
+        (["transaction", "history"], "Open Transactions from the navbar to see deposits, repayments, disbursements, and pending payment items."),
+        (["admin", "analytics", "graph"], "Admins can open Account > Analytics to view applicant numbers, loan status, repayments, and monthly usage graphs."),
+        (["profile", "account"], "Use Account > Profile to view your account details."),
+        (["pending", "payment"], "Pending payment means STK push was initiated but payment has not been completed on phone yet."),
+    ]
+
+    for keywords, answer in rules:
+        if any(keyword in question for keyword in keywords):
+            return JsonResponse({"answer": answer})
+
+    return JsonResponse(
+        {
+            "answer": "You can ask about savings, loans, repayments, transactions, profile, or admin analytics navigation.",
+        }
+    )

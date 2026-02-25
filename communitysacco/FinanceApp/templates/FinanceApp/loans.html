@@ -5,7 +5,6 @@
   <div class="content-panel p-4 mb-4">
     <h2 class="section-title mb-1">Loan Application</h2>
     <p class="mb-0">Submit your request and track approval updates.</p>
-    <a href="{% url 'mpesaPayment' %}" class="btn btn-success mt-3">Repay loan</a>
   </div>
 
   {% if messages %}
@@ -57,6 +56,7 @@
               <th>Amount</th>
               <th>Status</th>
               <th>Admin Comment</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -68,10 +68,19 @@
                 <td>{{ loan.amount }}</td>
                 <td>{{ loan.status }}</td>
                 <td>{{ loan.admin_comment|default:"-" }}</td>
+                <td>
+                  {% if loan.status == "APPROVED" %}
+                    <a href="{% url 'mpesaPayment' %}?payment_type=LOAN_REPAYMENT&amount={{ loan.amount }}" class="btn btn-sm btn-success">
+                      Pay
+                    </a>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
               </tr>
             {% empty %}
               <tr>
-                <td colspan="6">No loan requests submitted yet.</td>
+                <td colspan="7">No loan requests submitted yet.</td>
               </tr>
             {% endfor %}
           </tbody>

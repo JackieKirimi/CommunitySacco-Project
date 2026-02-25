@@ -9,5 +9,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('register/', views.registerUser, name='register'),
     path('profile/', views.profile, name='profile'),
+    path('values/', views.app_values, name='app-values'),
+    path('chatbot-assistant/', views.chatbot_assistant, name='chatbot-assistant'),
     
 ]

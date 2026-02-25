@@ -8,5 +8,7 @@ urlpatterns = [
     path('transactions/', views.transactions, name='transactions'),
     path('admin/login/', views.admin_login, name='admin-login'),
     path('admin/loans/', views.loan_approval_dashboard, name='loan-approval-dashboard'),
+    path('admin/analytics/', views.admin_analytics_dashboard, name='admin-analytics-dashboard'),
     path('payment/',views.mpesaPayment,name='mpesaPayment'),
+    path('payment/callback/', views.mpesa_callback, name='mpesa-callback'),
 ]
