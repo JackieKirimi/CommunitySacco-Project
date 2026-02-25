@@ -5,6 +5,7 @@
   <div class="content-panel p-4 mb-4">
     <h2 class="section-title mb-1">Loan Application</h2>
     <p class="mb-0">Submit your request and track approval updates.</p>
+    <a href="{% url 'mpesaPayment' %}" class="btn btn-success mt-3">Repay loan</a>
   </div>
 
   {% if messages %}
@@ -15,6 +16,7 @@
 
   <div class="content-panel p-4 mb-4">
       <h5 class="section-title">Apply for a Loan</h5>
+       
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row g-3">

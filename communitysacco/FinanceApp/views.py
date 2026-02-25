@@ -9,6 +9,20 @@ from django.utils import timezone
 
 from .forms import LoanRequestForm, SavingsRecordForm
 from .models import LoanRequest, Transaction, UserLoanLimit
+from django.http import HttpResponse
+from django_daraja.mpesa.core import MpesaClient
+
+def index(request):
+    cl = MpesaClient()
+    # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+    phone_number = '+254742252718'
+    amount = 1
+    account_reference = 'reference'
+    transaction_desc = 'Description'
+    callback_url = 'https://api.darajambili.com/express-payment'
+    response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    return HttpResponse(response)
+
 
 
 def _is_staff(user):
@@ -130,3 +144,19 @@ def loan_approval_dashboard(request):
     }
     return render(request, "FinanceApp/loan_approval_dashboard.html", context)
 
+def mpesaPayment(request):
+    if request.method == "POST":
+        phone_number = request.POST.get("phonenumber")
+        amount = int(float(request.POST.get("amount")))
+        cl = MpesaClient()
+    # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+        phone_number = phone_number
+        amount = amount
+        account_reference = 'FinanceApp Payment'
+        transaction_desc = 'savings deposit'
+        callback_url = 'https://api.darajambili.com/express-payment'
+        response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+    else:
+        pass   
+    context = {}
+    return render(request, 'FinanceApp/prompt_stk_push.html', context)
